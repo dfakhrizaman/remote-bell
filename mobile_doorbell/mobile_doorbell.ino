@@ -2,17 +2,15 @@
 #include <HTTPClient.h>                                
 #include <IOXhop_FirebaseESP32.h>
 #include "time.h"
-                                         
-#define FIREBASE_Host "mobile-doorbell-default-rtdb.asia-southeast1.firebasedatabase.app/"
-#define FIREBASE_authorization_key "FjuBvesaB2QYL6eOA1veTxdiGRgt07h0PdDlsOmf"
+#include "creds.h" // Firebase credentials
+
+
+// WiFi Credentials
 #define WIFI_SSID "password"
 #define WIFI_PASSWORD "daffauchiha"
 
 int buzzerPin = 2;
-
 String isBellPressed = "FALSE";
-
-
 String iftttUrl = "https://maker.ifttt.com/trigger/bell-rang/with/key/fqUcX7qCK_HPv1TmXRMj1ZZypBynHDUXrsH9oTYUv9o";
 
 // Variables  for date & time
@@ -20,10 +18,9 @@ const char* ntpServer = "pool.ntp.org";
 const int   daylightOffset_sec = 21600;
 const long  gmtOffset_sec = 3600;
 
-
+// Task initialization
 TaskHandle_t mainTask;
 TaskHandle_t sendMail;
-
 
 
 // Returns Date
@@ -131,9 +128,16 @@ void sendMailTrigger(){
 
 void sendMailcode( void * pvParameters ){
   Serial.println("Sending Email");
-  delay(4000);
-  Serial.println("Email sent");
+
   //TODO: Implement HTTP Request
+  HTTPClient http;
+  
+  http.begin(iftttUrl);
+  int httpResponseCode = http.GET();
+  
+  Serial.println("Email sent");
+  
+
   vTaskDelete(NULL);
 }
 
