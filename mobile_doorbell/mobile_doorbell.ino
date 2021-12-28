@@ -102,6 +102,7 @@ void setup() {
   String hour = {printLocalHour()};
   Serial.println (hour);
 
+  // Run main task
   xTaskCreatePinnedToCore(
                     mainTaskCode,   /* Task function. */
                     "mainTask",     /* name of task. */
@@ -115,6 +116,7 @@ void setup() {
   delay(500);
 }
 
+// Controller function for running sendMail Task
 void sendMailTrigger(){
   xTaskCreatePinnedToCore(
                     sendMailcode,   /* Task function. */
@@ -126,6 +128,7 @@ void sendMailTrigger(){
                     1);          /* pin task to core 1 */
 }
 
+// Send mail
 void sendMailcode( void * pvParameters ){
   Serial.println("Sending Email");
 
@@ -141,10 +144,10 @@ void sendMailcode( void * pvParameters ){
   vTaskDelete(NULL);
 }
 
+// Main task, running for infinite time
 void mainTaskCode( void * pvParameters ){
-  Serial.print("Task1 running on core ");
-  Serial.println(xPortGetCoreID());
-
+  Serial.println("Starting main task.");
+  
   for(;;){
 
     isBellPressed = Firebase.getString("isBellPressed");
@@ -156,11 +159,9 @@ void mainTaskCode( void * pvParameters ){
       sendMailTrigger();
       
     }
-  
+    
     else if (isBellPressed == "FALSE") {             
       Serial.println("OFF");
-      digitalWrite(LED_BUILTIN, LOW);
-      digitalWrite(buzzerPin, LOW);
     }
   
     else {
