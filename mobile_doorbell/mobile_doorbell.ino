@@ -2,7 +2,7 @@
 #include <HTTPClient.h>                                
 #include <IOXhop_FirebaseESP32.h>
 #include "time.h"
-#include "creds.h" // Firebase credentials
+#include "creds.h" // Firebase and IFTTTcredentials
 
 
 // WiFi Credentials
@@ -11,7 +11,6 @@
 
 int buzzerPin = 2;
 String isBellPressed = "FALSE";
-String iftttUrl = "https://maker.ifttt.com/trigger/bell-rang/with/key/fqUcX7qCK_HPv1TmXRMj1ZZypBynHDUXrsH9oTYUv9o";
 
 // Variables  for date & time
 const char* ntpServer = "pool.ntp.org";
