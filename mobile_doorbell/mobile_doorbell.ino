@@ -56,6 +56,7 @@ String printLocalHour()
 // Trigger buzzer and built-in LED
 void triggerOutput(){
   Serial.println("Ringing Started");
+  
   for (int i = 0; i < 3; i++) {
     digitalWrite(LED_BUILTIN, HIGH);
     digitalWrite(buzzerPin, HIGH);
