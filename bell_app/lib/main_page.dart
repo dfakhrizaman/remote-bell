@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage> {
           children: [
             Text(
               'Press to ring the bell! 🔔',
-              style: TextStyle(fontSize: 36),
+              style: TextStyle(fontSize: 28),
             ),
             SizedBox(
               height: 24,

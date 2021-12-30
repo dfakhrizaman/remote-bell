@@ -2,7 +2,7 @@
 #include <HTTPClient.h>                                
 #include <IOXhop_FirebaseESP32.h>
 #include "time.h"
-#include "creds.h" // Firebase and IFTTTcredentials
+#include "creds.h" // Firebase and IFTTT credentials
 
 
 // WiFi Credentials
@@ -20,6 +20,7 @@ const long  gmtOffset_sec = 3600;
 // Task initialization
 TaskHandle_t mainTask;
 TaskHandle_t sendMail;
+
 
 
 // Returns Date
@@ -78,8 +79,8 @@ void setup() {
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);                                      
   Serial.print("Connecting to WIFI");
   while (WiFi.status() != WL_CONNECTED) {
-  Serial.print(".");
-  delay(500);
+    Serial.print(".");
+    delay(500);
   }
 
   Serial.println();
@@ -90,8 +91,7 @@ void setup() {
 
   // Establish firebase connection
   Firebase.begin(FIREBASE_Host, FIREBASE_authorization_key);
-  Firebase.setString("isBellPressed", "FALSE");
-
+  Firebase.setString("bell_status/isBellPressed", "FALSE");
 
   // Get time
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
@@ -149,12 +149,16 @@ void mainTaskCode( void * pvParameters ){
   Serial.println("Starting main task.");
   
   for(;;){
+    
 
-    isBellPressed = Firebase.getString("isBellPressed");
+//    bellDataFirebase.getString("bell_status/isBellPressed");
+    isBellPressed = Firebase.getString("bell_status/isBellPressed");
+    Serial.print('bell status: ');
+    Serial.println(isBellPressed);
 
     if (isBellPressed == "TRUE") {
       triggerOutput();
-      Firebase.setString("isBellPressed", "FALSE");
+      Firebase.setString("bell_status/isBellPressed", "FALSE");
 
       sendMailTrigger();
       
